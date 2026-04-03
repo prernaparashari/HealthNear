@@ -8,7 +8,7 @@ This project demonstrates core backend development concepts like REST APIs, auth
 
 ## 🚀 Live Demo
 
-🌐 Frontend: https://your-username.github.io/HealthNear/
+🌐 Frontend: https://prernaparashari.github.io/HealthNear/#
 
 
 ---
