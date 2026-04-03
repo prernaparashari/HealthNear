@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Healthnear</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #F5F0E8;
+      --deep: #0D1B2A;
+      --teal: #00A896;
+      --teal-light: #02C39A;
+      --coral: #F25C54;
+      --gold: #E9C46A;
+      --muted: #6B7280;
+      --card-bg: #FFFFFF;
+      --border: rgba(0,168,150,0.15);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--deep);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999; opacity: 0.4;
+    }
+
+    /* HEADER */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(245, 240, 232, 0.88);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+
+    .logo {
+      font-family: 'Fraunces', serif;
+      font-size: 1.6rem; font-weight: 700;
+      color: var(--deep); letter-spacing: -0.03em;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+
+    .logo-dot {
+      width: 8px; height: 8px;
+      background: var(--teal); border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.5); opacity: 0.6; }
+    }
+
+    nav { display: flex; align-items: center; gap: 2.5rem; }
+
+    nav a {
+      text-decoration: none; color: var(--muted);
+      font-size: 0.9rem; font-weight: 500; letter-spacing: 0.02em;
+      position: relative; transition: color 0.25s;
+    }
+
+    nav a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0;
+      width: 0; height: 2px; background: var(--teal);
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    nav a:hover { color: var(--deep); }
+    nav a:hover::after { width: 100%; }
+
+    .nav-cta {
+      background: var(--deep) !important; color: var(--cream) !important;
+      padding: 0.6rem 1.4rem; border-radius: 100px;
+      font-weight: 600 !important; transition: background 0.25s, transform 0.2s !important;
+    }
+
+    .nav-cta::after { display: none !important; }
+    .nav-cta:hover { background: var(--teal) !important; transform: translateY(-1px); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center; padding: 8rem 4rem 4rem; gap: 4rem;
+      position: relative; overflow: hidden;
+    }
+
+    .hero::before {
+      content: ''; position: absolute; right: -10%; top: 5%;
+      width: 700px; height: 700px;
+      background: radial-gradient(ellipse, rgba(0,168,150,0.12) 0%, transparent 70%);
+      border-radius: 50%; pointer-events: none;
+    }
+
+    .hero::after {
+      content: ''; position: absolute; left: 20%; bottom: 0;
+      width: 400px; height: 400px;
+      background: radial-gradient(ellipse, rgba(242,92,84,0.07) 0%, transparent 70%);
+      border-radius: 50%; pointer-events: none;
+    }
+
+    .hero-content { position: relative; z-index: 2; }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(0,168,150,0.1); border: 1px solid rgba(0,168,150,0.3);
+      padding: 0.4rem 1rem; border-radius: 100px;
+      font-size: 0.8rem; font-weight: 600; color: var(--teal);
+      letter-spacing: 0.05em; text-transform: uppercase;
+      margin-bottom: 1.5rem; animation: fadeUp 0.8s ease both;
+    }
+
+    .hero-badge span { width: 6px; height: 6px; background: var(--teal); border-radius: 50%; animation: pulse 1.5s infinite; }
+
+    h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(3rem, 5vw, 4.5rem); font-weight: 700;
+      line-height: 1.05; letter-spacing: -0.04em; color: var(--deep);
+      margin-bottom: 1.5rem; animation: fadeUp 0.8s 0.1s ease both;
+    }
+
+    h1 em { font-style: italic; color: var(--teal); }
+
+    .hero-sub {
+      font-size: 1.1rem; color: var(--muted); line-height: 1.7;
+      max-width: 480px; margin-bottom: 2.5rem;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+
+    .hero-actions {
+      display: flex; align-items: center; gap: 1.2rem;
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      background: var(--deep); color: var(--cream);
+      padding: 0.9rem 2rem; border-radius: 100px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 0 8px 24px rgba(13,27,42,0.18);
+    }
+
+    .btn-primary:hover { background: var(--teal); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,168,150,0.3); }
+    .btn-primary svg { transition: transform 0.25s; }
+    .btn-primary:hover svg { transform: translateX(3px); }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      color: var(--deep); font-size: 0.95rem; font-weight: 500;
+      text-decoration: none; padding: 0.9rem 0; transition: gap 0.25s;
+    }
+
+    .btn-secondary:hover { gap: 0.8rem; color: var(--teal); }
+
+    .hero-stats {
+      display: flex; gap: 2.5rem; margin-top: 3rem;
+      padding-top: 2rem; border-top: 1px solid var(--border);
+      animation: fadeUp 0.8s 0.4s ease both;
+    }
+
+    .stat-num { font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 700; color: var(--deep); line-height: 1; }
+    .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.25rem; }
+
+    /* Hero Visual */
+    .hero-visual { position: relative; z-index: 2; animation: fadeIn 1s 0.5s ease both; }
+
+    .map-card {
+      background: var(--card-bg); border-radius: 24px; padding: 2rem;
+      box-shadow: 0 24px 60px rgba(13,27,42,0.12), 0 4px 16px rgba(13,27,42,0.06);
+    }
+
+    .map-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+    .map-title { font-family: 'Fraunces', serif; font-size: 1.1rem; font-weight: 700; }
+
+    .map-live {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.75rem; color: var(--teal); font-weight: 600;
+    }
+
+    .map-live::before { content: ''; width: 6px; height: 6px; background: var(--teal); border-radius: 50%; animation: pulse 1.5s infinite; }
+
+    .map-bg {
+      background: #E8F4F3; border-radius: 16px; height: 220px;
+      position: relative; overflow: hidden;
+    }
+
+    .map-bg::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(0,168,150,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(0,168,150,0.08) 1px, transparent 1px);
+      background-size: 30px 30px;
+    }
+
+    .map-bg::after { content: ''; position: absolute; top: 45%; left: 0; right: 0; height: 3px; background: rgba(255,255,255,0.8); }
+
+    .map-road-v { position: absolute; top: 0; bottom: 0; left: 40%; width: 3px; background: rgba(255,255,255,0.8); }
+
+    .map-pin { position: absolute; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.2s; }
+    .map-pin:hover { transform: translateY(-3px) scale(1.05); }
+
+    .pin-icon {
+      width: 40px; height: 40px; background: var(--deep);
+      border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 12px rgba(13,27,42,0.25);
+    }
+
+    .pin-icon.teal { background: var(--teal); }
+    .pin-icon.coral { background: var(--coral); }
+    .pin-icon-inner { transform: rotate(45deg); font-size: 16px; }
+    .pin-label { margin-top: 6px; background: white; padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.65rem; font-weight: 600; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+
+    .you-pin { position: absolute; top: 44%; left: 39%; transform: translate(-50%, -50%); }
+
+    .you-dot {
+      width: 16px; height: 16px; background: #4285F4;
+      border-radius: 50%; border: 3px solid white;
+      box-shadow: 0 0 0 6px rgba(66,133,244,0.2);
+      animation: ripple 2s infinite;
+    }
+
+    @keyframes ripple {
+      0% { box-shadow: 0 0 0 0px rgba(66,133,244,0.3); }
+      100% { box-shadow: 0 0 0 14px rgba(66,133,244,0); }
+    }
+
+    .doctor-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 1rem; }
+
+    .doc-card {
+      background: var(--cream); border-radius: 14px; padding: 0.9rem;
+      display: flex; align-items: center; gap: 0.7rem;
+      cursor: pointer; transition: all 0.2s; border: 1px solid var(--border);
+    }
+
+    .doc-card:hover { border-color: var(--teal); box-shadow: 0 4px 16px rgba(0,168,150,0.12); transform: translateY(-1px); }
+    .doc-avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+    .doc-info { flex: 1; min-width: 0; }
+    .doc-name { font-size: 0.78rem; font-weight: 600; color: var(--deep); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .doc-spec { font-size: 0.68rem; color: var(--muted); margin-top: 0.1rem; }
+    .doc-dist { font-size: 0.68rem; font-weight: 700; color: var(--teal); white-space: nowrap; }
+
+    .float-notif {
+      position: absolute; top: -1.2rem; right: -1rem;
+      background: white; border-radius: 14px; padding: 0.7rem 1rem;
+      display: flex; align-items: center; gap: 0.6rem;
+      box-shadow: 0 8px 24px rgba(13,27,42,0.15);
+      font-size: 0.78rem; font-weight: 600;
+      animation: float 3s ease-in-out infinite; white-space: nowrap;
+    }
+
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+    .notif-icon { width: 32px; height: 32px; background: rgba(2,195,154,0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+
+    /* SEARCH BAR */
+    .search-section { padding: 0 4rem 4rem; }
+
+    .search-bar {
+      background: white; border-radius: 20px; padding: 1.5rem 2rem;
+      display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 1rem;
+      align-items: center; box-shadow: 0 16px 48px rgba(13,27,42,0.1);
+      border: 1px solid var(--border);
+    }
+
+    .search-field { display: flex; flex-direction: column; gap: 0.3rem; padding-right: 1rem; border-right: 1px solid var(--border); }
+    .search-field:last-of-type { border-right: none; }
+    .search-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+    .search-input { background: none; border: none; outline: none; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 500; color: var(--deep); }
+    .search-input::placeholder { color: var(--muted); }
+
+    .search-btn {
+      background: var(--teal); color: white; border: none;
+      padding: 0.9rem 1.8rem; border-radius: 14px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600;
+      cursor: pointer; display: flex; align-items: center; gap: 0.5rem;
+      transition: all 0.25s; white-space: nowrap;
+    }
+
+    .search-btn:hover { background: #008f7e; transform: translateY(-1px); }
+
+    /* FEATURES */
+    .features-section { padding: 5rem 4rem; }
+
+    .section-header { text-align: center; margin-bottom: 4rem; }
+    .section-tag { display: inline-block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--teal); margin-bottom: 1rem; }
+
+    h2 { font-family: 'Fraunces', serif; font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 700; letter-spacing: -0.03em; color: var(--deep); line-height: 1.1; }
+    .section-sub { color: var(--muted); margin-top: 0.8rem; font-size: 1rem; }
+
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+
+    .feature-card {
+      background: white; border-radius: 24px; padding: 2.2rem;
+      border: 1px solid var(--border);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative; overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: ''; position: absolute; bottom: -40px; right: -40px;
+      width: 120px; height: 120px; border-radius: 50%; opacity: 0.06; transition: all 0.4s;
+    }
+
+    .feature-card:nth-child(1)::before { background: var(--teal); }
+    .feature-card:nth-child(2)::before { background: var(--coral); }
+    .feature-card:nth-child(3)::before { background: var(--gold); }
+
+    .feature-card:hover { transform: translateY(-6px); box-shadow: 0 24px 48px rgba(13,27,42,0.1); border-color: transparent; }
+    .feature-card:hover::before { width: 200px; height: 200px; opacity: 0.08; }
+
+    .feature-icon { width: 52px; height: 52px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.4rem; }
+    .icon-teal { background: rgba(0,168,150,0.12); }
+    .icon-coral { background: rgba(242,92,84,0.12); }
+    .icon-gold { background: rgba(233,196,106,0.2); }
+    .feature-title { font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 700; color: var(--deep); margin-bottom: 0.6rem; }
+    .feature-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+    /* SPECIALTIES */
+    .specialties-section { padding: 5rem 4rem; background: var(--deep); position: relative; overflow: hidden; }
+
+    .specialties-section::before {
+      content: ''; position: absolute; top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(ellipse, rgba(0,168,150,0.15) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .specialties-section .section-tag { color: var(--teal); }
+    .specialties-section h2 { color: var(--cream); }
+    .specialties-section .section-sub { color: rgba(245,240,232,0.5); }
+
+    .specialties-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 3rem; }
+
+    .spec-card {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; padding: 1.8rem 1.5rem; text-align: center;
+      cursor: pointer; transition: all 0.3s;
+    }
+
+    .spec-card:hover { background: rgba(0,168,150,0.15); border-color: rgba(0,168,150,0.4); transform: translateY(-4px); }
+
+    .spec-emoji { font-size: 2.2rem; margin-bottom: 1rem; display: block; }
+    .spec-name { font-size: 0.9rem; font-weight: 600; color: var(--cream); margin-bottom: 0.3rem; }
+    .spec-count { font-size: 0.75rem; color: rgba(245,240,232,0.45); }
+
+    /* TESTIMONIALS */
+    .testimonials-section { padding: 5rem 4rem; }
+    .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; }
+
+    .testimonial-card { background: white; border-radius: 24px; padding: 2rem; border: 1px solid var(--border); transition: all 0.3s; }
+    .testimonial-card:hover { box-shadow: 0 16px 40px rgba(13,27,42,0.08); transform: translateY(-3px); }
+
+    .t-stars { color: var(--gold); font-size: 1rem; margin-bottom: 1rem; letter-spacing: 0.1em; }
+    .t-text { font-size: 0.92rem; color: #374151; line-height: 1.7; margin-bottom: 1.5rem; font-style: italic; }
+    .t-author { display: flex; align-items: center; gap: 0.8rem; }
+    .t-avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; background: var(--cream); }
+    .t-name { font-weight: 600; font-size: 0.88rem; color: var(--deep); }
+    .t-role { font-size: 0.75rem; color: var(--muted); }
+
+    /* CTA */
+    .cta-section { padding: 4rem; }
+
+    .cta-box {
+      background: var(--teal); border-radius: 32px; padding: 4rem;
+      display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 3rem;
+      position: relative; overflow: hidden;
+    }
+
+    .cta-box::before { content: ''; position: absolute; right: -100px; bottom: -100px; width: 400px; height: 400px; background: rgba(255,255,255,0.08); border-radius: 50%; }
+    .cta-box::after { content: ''; position: absolute; right: 100px; top: -80px; width: 250px; height: 250px; background: rgba(255,255,255,0.06); border-radius: 50%; }
+
+    .cta-title { font-family: 'Fraunces', serif; font-size: 2.2rem; font-weight: 700; color: white; letter-spacing: -0.03em; line-height: 1.15; }
+    .cta-sub { color: rgba(255,255,255,0.75); margin-top: 0.8rem; font-size: 1rem; line-height: 1.6; }
+
+    .cta-btn {
+      background: white; color: var(--teal); padding: 1rem 2.2rem; border-radius: 100px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 700;
+      text-decoration: none; transition: all 0.25s; white-space: nowrap;
+      position: relative; z-index: 1;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+
+    .cta-btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 12px 32px rgba(0,0,0,0.2); }
+
+    /* FOOTER */
+    footer { background: var(--deep); padding: 3rem 4rem 2rem; color: rgba(245,240,232,0.5); }
+    .footer-top { display: flex; align-items: center; justify-content: space-between; padding-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 2rem; }
+    .footer-logo { font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 700; color: var(--cream); }
+    .footer-links { display: flex; gap: 2rem; }
+    .footer-links a { color: rgba(245,240,232,0.5); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--cream); }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      header { padding: 1rem 2rem; }
+      .hero { grid-template-columns: 1fr; padding: 7rem 2rem 3rem; }
+      .hero-visual { display: none; }
+      .search-bar { grid-template-columns: 1fr 1fr; }
+      .features-grid, .testimonials-grid { grid-template-columns: 1fr 1fr; }
+      .specialties-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-section, .specialties-section, .testimonials-section, .cta-section { padding: 3rem 2rem; }
+      .search-section { padding: 0 2rem 3rem; }
+      .cta-box { grid-template-columns: 1fr; gap: 2rem; padding: 3rem 2rem; }
+      footer { padding: 2rem; }
+      .footer-top { flex-direction: column; gap: 1.5rem; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <span class="logo-dot"></span>
+    HealthNear
+  </div>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Find Doctors</a>
+    <a href="#">Specialties</a>
+    <a href="#">Booking</a>
+    <a href="#" class="nav-cta">Login</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge"><span></span> 2,400+ Doctors Near You</div>
+    <h1>Find the <em>Best Doctors</em> Near You</h1>
+    <p class="hero-sub">Locate hospitals, clinics, and specialists in seconds. Book appointments instantly with trusted healthcare providers in your area.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">
+        Find Nearby Doctors
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#" class="btn-secondary">
+        How it works
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">2.4k+</div>
+        <div class="stat-label">Verified Doctors</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">98%</div>
+        <div class="stat-label">Satisfaction Rate</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">50+</div>
+        <div class="stat-label">Specialties</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div style="position: relative; padding: 1.5rem 1.5rem 0 0;">
+      <div class="float-notif">
+        <div class="notif-icon">✅</div>
+        Appointment confirmed — Dr. Priya
+      </div>
+      <div class="map-card">
+        <div class="map-header">
+          <span class="map-title">Doctors Near You</span>
+          <span class="map-live">Live</span>
+        </div>
+        <div class="map-bg">
+          <div class="map-road-v"></div>
+          <div class="you-pin"><div class="you-dot"></div></div>
+          <div class="map-pin" style="top:18%;left:55%;">
+            <div class="pin-icon teal"><span class="pin-icon-inner">🏥</span></div>
+            <span class="pin-label">City Hospital</span>
+          </div>
+          <div class="map-pin" style="top:55%;left:65%;">
+            <div class="pin-icon"><span class="pin-icon-inner">👨‍⚕️</span></div>
+            <span class="pin-label">Dr. Sharma</span>
+          </div>
+          <div class="map-pin" style="top:25%;left:20%;">
+            <div class="pin-icon coral"><span class="pin-icon-inner">🦷</span></div>
+            <span class="pin-label">Dental Clinic</span>
+          </div>
+          <div class="map-pin" style="top:60%;left:15%;">
+            <div class="pin-icon teal"><span class="pin-icon-inner">💊</span></div>
+            <span class="pin-label">MedPlus</span>
+          </div>
+        </div>
+        <div class="doctor-cards">
+          <div class="doc-card">
+            <div class="doc-avatar" style="background:#E0F7F4">👩‍⚕️</div>
+            <div class="doc-info"><div class="doc-name">Dr. Priya S.</div><div class="doc-spec">Cardiologist</div></div>
+            <div class="doc-dist">0.4 km</div>
+          </div>
+          <div class="doc-card">
+            <div class="doc-avatar" style="background:#FEF0EF">👨‍⚕️</div>
+            <div class="doc-info"><div class="doc-name">Dr. Rajesh K.</div><div class="doc-spec">General Physician</div></div>
+            <div class="doc-dist">0.8 km</div>
+          </div>
+          <div class="doc-card">
+            <div class="doc-avatar" style="background:#FEF9EC">🦷</div>
+            <div class="doc-info"><div class="doc-name">Dr. Anita M.</div><div class="doc-spec">Dentist</div></div>
+            <div class="doc-dist">1.2 km</div>
+          </div>
+          <div class="doc-card">
+            <div class="doc-avatar" style="background:#E8F4F3">🧠</div>
+            <div class="doc-info"><div class="doc-name">Dr. Vikram N.</div><div class="doc-spec">Neurologist</div></div>
+            <div class="doc-dist">1.5 km</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="search-section">
+  <div class="search-bar">
+    <div class="search-field">
+      <span class="search-label">Specialty</span>
+      <input class="search-input" type="text" placeholder="e.g. Cardiologist" />
+    </div>
+    <div class="search-field">
+      <span class="search-label">Location</span>
+      <input class="search-input" type="text" placeholder="Your city or area" />
+    </div>
+    <div class="search-field">
+      <span class="search-label">Availability</span>
+      <input class="search-input" type="text" placeholder="Today, Tomorrow..." />
+    </div>
+    <button class="search-btn">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      Search
+    </button>
+  </div>
+</section>
+
+<section class="features-section">
+  <div class="section-header reveal">
+    <div class="section-tag">Why MediNearby</div>
+    <h2>Healthcare, Simplified<br/>for Everyone</h2>
+    <p class="section-sub">Everything you need to find, connect with, and book the right doctor.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card reveal" style="transition-delay:0.1s">
+      <div class="feature-icon icon-teal">📍</div>
+      <div class="feature-title">Location Based</div>
+      <p class="feature-desc">Find doctors and hospitals within minutes of your current location. Real-time map view with distance indicators and live availability.</p>
+    </div>
+    <div class="feature-card reveal" style="transition-delay:0.2s">
+      <div class="feature-icon icon-coral">🔬</div>
+      <div class="feature-title">Specialists</div>
+      <p class="feature-desc">Search across 50+ medical specializations. Filter by ratings, experience, and consultation fees to find your perfect match.</p>
+    </div>
+    <div class="feature-card reveal" style="transition-delay:0.3s">
+      <div class="feature-icon icon-gold">📅</div>
+      <div class="feature-title">Instant Booking</div>
+      <p class="feature-desc">Book appointments with a single tap. Get instant confirmation, reminders, and digital prescriptions post-consultation.</p>
+    </div>
+  </div>
+</section>
+
+<section class="specialties-section">
+  <div class="section-header reveal">
+    <div class="section-tag">Browse Specialties</div>
+    <h2>50+ Medical Specialties<br/>at Your Fingertips</h2>
+    <p class="section-sub">From routine checkups to specialist consultations — we've got you covered.</p>
+  </div>
+  <div class="specialties-grid">
+    <div class="spec-card reveal" style="transition-delay:0.05s"><span class="spec-emoji">❤️</span><div class="spec-name">Cardiology</div><div class="spec-count">124 doctors</div></div>
+    <div class="spec-card reveal" style="transition-delay:0.1s"><span class="spec-emoji">🧠</span><div class="spec-name">Neurology</div><div class="spec-count">87 doctors</div></div>
+    <div class="spec-card reveal" style="transition-delay:0.15s"><span class="spec-emoji">🦴</span><div class="spec-name">Orthopedics</div><div class="spec-count">96 doctors</div></div>
+    <div class="spec-card reveal" style="transition-delay:0.2s"><span class="spec-emoji">👁️</span><div class="spec-name">Ophthalmology</div><div class="spec-count">62 doctors</div></div>
+    <div class="spec-card reveal" style="transition-delay:0.25s"><span class="spec-emoji">🦷</span><div class="spec-name">Dentistry</div><div class="spec-count">215 doctors</div></div>
+    <div class="spec-card reveal" style="transition-delay:0.3s"><span class="spec-emoji">🧬</span><div class="spec-name">Dermatology</div><div class="spec-count">78 doctors</div></div>
+    <div class="spec-card reveal" style="transition-delay:0.35s"><span class="spec-emoji">👶</span><div class="spec-name">Pediatrics</div><div class="spec-count">143 doctors</div></div>
+    <div class="spec-card reveal" style="transition-delay:0.4s"><span class="spec-emoji">🩻</span><div class="spec-name">Radiology</div><div class="spec-count">54 doctors</div></div>
+  </div>
+</section>
+
+<section class="testimonials-section">
+  <div class="section-header reveal">
+    <div class="section-tag">Patient Stories</div>
+    <h2>Loved by Thousands<br/>of Patients</h2>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card reveal" style="transition-delay:0.1s">
+      <div class="t-stars">★★★★★</div>
+      <p class="t-text">"Found a cardiologist within 500 meters of my house. Booked the appointment in under 2 minutes. The experience was seamless and the doctor was excellent."</p>
+      <div class="t-author"><div class="t-avatar">👩</div><div><div class="t-name">Sunita Verma</div><div class="t-role">Patient, Lucknow</div></div></div>
+    </div>
+    <div class="testimonial-card reveal" style="transition-delay:0.2s">
+      <div class="t-stars">★★★★★</div>
+      <p class="t-text">"As a working professional, I never had time to research doctors. MediNearby changed everything — instant results, verified reviews, quick booking."</p>
+      <div class="t-author"><div class="t-avatar">👨</div><div><div class="t-name">Arjun Mehta</div><div class="t-role">Patient, Bareilly</div></div></div>
+    </div>
+    <div class="testimonial-card reveal" style="transition-delay:0.3s">
+      <div class="t-stars">★★★★★</div>
+      <p class="t-text">"My daughter needed a pediatrician urgently. Found one nearby in minutes, got an appointment same day. This app is a lifesaver for parents like me."</p>
+      <div class="t-author"><div class="t-avatar">👩</div><div><div class="t-name">Deepa Sharma</div><div class="t-role">Patient, Agra</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section reveal">
+  <div class="cta-box">
+    <div>
+      <div class="cta-title">Ready to Find Your<br/>Perfect Doctor?</div>
+      <p class="cta-sub">Join 50,000+ patients who've already simplified their healthcare journey with MediNearby.</p>
+    </div>
+    <a href="#" class="cta-btn">
+      Get Started Free
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-logo">HealthNear</div>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Contact Us</a>
+      <a href="#">For Doctors</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 HealthNear. All rights reserved.</span>
+    <span>Made with ❤️ for better healthcare access</span>
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  window.addEventListener('scroll', () => {
+    document.querySelector('header').style.boxShadow = window.scrollY > 20 ? '0 4px 24px rgba(13,27,42,0.08)' : 'none';
+  });
+</script>
+</body>
+</html>
+<script src="script.js"></script>
