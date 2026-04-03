@@ -1,104 +1,119 @@
-# HealthNear 🏥
+# 🏥 HealthNear
 
-HealthNear is a full-stack healthcare web application that helps users find nearby doctors based on their specialization and book appointments easily. The goal of this project is to make healthcare access simple, fast, and organized.
+HealthNear is a full-stack healthcare web application that allows users to register and log in securely. It is built using Node.js, Express, and MongoDB for the backend, and a simple frontend deployed using GitHub Pages.
 
----
-
-## 🚀 Features
-
-* 🔍 Search doctors by specialization
-* 🏥 View doctor details and specialization
-* 📅 Simple appointment booking interface
-* 🔐 User authentication system
-* 💻 Clean and responsive user interface
+This project demonstrates core backend development concepts like REST APIs, authentication, and database integration.
 
 ---
 
-## 🛠 Tech Stack
+## 🚀 Live Demo
 
-**Frontend**
+🌐 Frontend: https://your-username.github.io/HealthNear/
 
-* HTML
-* CSS
-* JavaScript
 
-**Backend**
+---
+
+## ✨ Features
+
+* 👤 User Registration
+* 🔐 Secure Login System
+* 🔒 Password Hashing (bcrypt)
+* 🌐 REST API using Express.js
+* 🗄️ MongoDB Atlas Integration
+* 🔗 Frontend connected to live backend
+
+---
+
+## 🛠️ Tech Stack
 
 * Node.js
 * Express.js
-
-**Database**
-
-* MongoDB
-
-**Tools**
-
-* GitHub
+* MongoDB Atlas
+* Mongoose
+* bcrypt
+* HTML, CSS, JavaScript
 
 ---
 
 ## 📂 Project Structure
 
-```
 HealthNear/
 │
-├── models/            # Database models
-├── index.html         # Main homepage
-├── script.js          # Frontend logic
-├── server.js          # Backend server
-├── package-lock.json  # Dependency file
-```
+├── server.js
+├── package.json
+├── models/
+│   └── user.js
+│
+├── frontend/
+│   ├── index.html
+│   ├── script.js
+│   └── style.css
 
 ---
 
-## ⚙️ Installation & Setup
+## ⚙️ Installation (Local Setup)
 
-1️⃣ Clone the repository
+1. Clone the repository
 
-```
-git clone https://github.com/prernaparashari/HealthNear.git
-```
+git clone https://github.com/your-username/HealthNear.git
 
-2️⃣ Go to the project folder
+2. Install dependencies
 
-```
-cd HealthNear
-```
-
-3️⃣ Install dependencies
-
-```
 npm install
-```
 
-4️⃣ Run the server
+3. Create `.env` file
 
-```
+MONGO_URI=your_mongodb_connection_string
+
+4. Run server
+
 node server.js
-```
 
-5️⃣ Open browser and visit
+---
 
-```
-http://localhost:3000
-```
+## 📡 API Endpoints
+
+### 🔹 Register User
+
+POST /register
+
+Request Body:
+{
+"name": "Prerna",
+"email": "[prerna@gmail.com](mailto:prerna@gmail.com)",
+"password": "123456"
+}
+
+---
+
+### 🔹 Login User
+
+POST /login
+
+Request Body:
+{
+"email": "[prerna@gmail.com](mailto:prerna@gmail.com)",
+"password": "123456"
+}
 
 ---
 
 ## 🎯 Future Improvements
 
-* Google Maps integration for nearby doctors
-* Online appointment scheduling
-* Doctor ratings and reviews
-* Patient dashboard
-* Mobile responsive UI improvements
+* 🗺️ Add map integration (nearby hospitals)
+* 🧑‍⚕️ Doctor listing system
+* 🔐 JWT Authentication
+* 🌐 Full UI improvements
 
 ---
 
 ## 👩‍💻 Author
 
-**Prerna Parashari**
-
-Aspiring Full Stack Developer interested in building real-world web applications and exploring modern web technologies.
+Prerna
 
 ---
+
+## ⭐ Note
+
+This project is built for learning full-stack development and demonstrates how frontend, backend, and database work together in a real-world application.
+
